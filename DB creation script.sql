@@ -159,7 +159,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Theatre`.`Seat` (
   `SeatID` INT NOT NULL AUTO_INCREMENT,
-  `SeatType` VARCHAR(6) NULL,
+  `SeatZone` VARCHAR(6) NULL,
   `Price` INT NULL,
   `NumberOfSeats` INT NULL,
   `PerformanceID` INT NOT NULL,
@@ -210,4 +210,4 @@ INSERT INTO Performer (pname) VALUES ("MammaMiaGroup");
 INSERT INTO ShowingPerformer(ShowID, PerformerID) VALUES (1,1); 
 INSERT INTO Performance (pdate, ptime, ShowingID) VALUES ("2022-07-13", "Matinee", 1);
 INSERT INTO Ticket (NumberOfTickets, Cost, CustomerID, PaymentID, ShowingID) VALUES (1,4000,1,1,1);
-INSERT INTO Seat (SeatType, NumberOfSeats, Price, PerformanceID) VALUES ("Circle", 80, 4000, 1), ("Stalls", 120, 4000, 1); 
+INSERT INTO Seat (SeatZone, NumberOfSeats, Price, PerformanceID) VALUES ("Circle", 80, 4000, 1), ("Stalls", 120, 4000, 1); 
