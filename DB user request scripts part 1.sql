@@ -23,31 +23,49 @@ WHERE
     Title = 'Mamma Mia';
 -- change title to user input --
 
-
+-- gets the all available seats/ tickets for a show (cheapest tickets, will let you see what you can say 'prices from £x) 
+-- ** GETS AVAILABILITY FOR A SHOW BASED OFF OF TITLE AND DATE INPUT
 SELECT 
-    Showing.Title, Performance.Price AS PricePence
+    Showing.Title,
+    SeatZone,
+    NumberOfSeats,
+    Seat.Price AS PricePence
 FROM
     Performance
         JOIN
-    Showing ON Showing.ShowID = Performance.ShowingID
+    Showing ON Showing.ShowingID = Performance.ShowingID
+        JOIN
+    Seat ON Seat.PerformanceID = Performance.PerformanceID
 WHERE
     Showing.Title = 'Mamma Mia'
-        AND Performance.pdate = '22-07-13';
+        AND Performance.pdate = '22-07-13'
+        AND SeatZone = 'Circle';
 -- change title and performance dates with userinput requests
 
 
-SELECT 
-    Showing.Title AS Title,
-    NumberOfSeatsCircle AS CircleSeats,
-    NumberOfSeatsStalls AS StallSeats,
-    (NumberOfSeatsStalls + NumberOfSeatsCircle) AS TotalSeats
+
+
+-- TB gets the Performance information and the pricing and availability for the seating zones (base prices)
+
+SELECT
+	Performance.PerformanceID,
+	Performance.ShowingID,
+	pdate,
+	ptime,
+    A.NumberOfSeats AS StallSeats,
+    A.Price AS StallPricePence,
+    B.NumberOfSeats AS CircleSeats,
+    B.Price AS CirclePricePence
 FROM
     Performance
         JOIN
-    Showing ON Showing.ShowID = Performance.ShowingID
+    Seat AS A ON A.PerformanceID = Performance.PerformanceID
+        JOIN
+    Seat AS B ON B.PerformanceID = Performance.PerformanceID
 WHERE
-    Showing.Title = 'Mamma Mia';
--- title can be changed to accept user input/search
+	A.SeatZone = "stalls"
+	AND
+	B.SeatZone = "circle";
 
 
 SELECT 
@@ -55,7 +73,7 @@ SELECT
 FROM
     Showing
         JOIN
-    Performance ON Showing.ShowID = Performance.ShowingID
+    Performance ON Showing.ShowingID = Performance.ShowingID
 WHERE
     pdate = '2022-07-13';
 
@@ -66,7 +84,7 @@ SELECT
 FROM
     Showing
         JOIN
-    Performance ON Showing.ShowID = Performance.ShowingID
+    Performance ON Showing.ShowingID = Performance.ShowingID
 WHERE
     pdate = CURDATE();
 
@@ -77,7 +95,7 @@ SELECT
 FROM
     Performance
         JOIN
-    Showing ON Showing.ShowID = Performance.ShowingID
+    Showing ON Showing.ShowingID = Performance.ShowingID
 WHERE
     Title = 'Mamma Mia'; 
 
@@ -95,6 +113,6 @@ SELECT
 FROM
     Ticket
         LEFT JOIN
-    Showing ON Ticket.ShowingID = Showing.ShowID
+    Showing ON Ticket.ShowingID = Showing.ShowingID
         LEFT JOIN
-    Performance ON Showing.ShowID = Performance.ShowingID;
+    Performance ON Showing.ShowingID = Performance.ShowingID;
