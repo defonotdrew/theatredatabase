@@ -60,15 +60,15 @@ ENGINE = InnoDB;
 -- Table `Theatre`.`Showing`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Theatre`.`Showing` (
-  `ShowID` INT NOT NULL AUTO_INCREMENT,
+  `ShowingID` INT NOT NULL AUTO_INCREMENT,
   `Title` VARCHAR(70) NULL,
   `Duration` INT NULL,
   `Lang` VARCHAR(45) NULL,
   `Info` VARCHAR(300) NULL,
   `ShowTypeID` INT NOT NULL,
-  PRIMARY KEY (`ShowID`),
+  PRIMARY KEY (`ShowingID`),
   INDEX `fk_Show_ShowType1_idx` (`ShowTypeID` ASC) VISIBLE,
-  UNIQUE INDEX `ShowID_UNIQUE` (`ShowID` ASC) VISIBLE,
+  UNIQUE INDEX `ShowID_UNIQUE` (`ShowingID` ASC) VISIBLE,
   CONSTRAINT `fk_Show_ShowType1`
     FOREIGN KEY (`ShowTypeID`)
     REFERENCES `Theatre`.`ShowType` (`ShowTypeID`)
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `Theatre`.`Ticket` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Ticket_Show1`
     FOREIGN KEY (`ShowingID`)
-    REFERENCES `Theatre`.`Showing` (`ShowID`)
+    REFERENCES `Theatre`.`Showing` (`ShowingID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `Theatre`.`Performance` (
   UNIQUE INDEX `PerformanceID_UNIQUE` (`PerformanceID` ASC) VISIBLE,
   CONSTRAINT `fk_Performance_Show1`
     FOREIGN KEY (`ShowingID`)
-    REFERENCES `Theatre`.`Showing` (`ShowID`)
+    REFERENCES `Theatre`.`Showing` (`ShowingID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -177,14 +177,14 @@ ENGINE = InnoDB;
 -- Table `Theatre`.`ShowingPerformer`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Theatre`.`ShowingPerformer` (
-  `ShowID` INT NOT NULL,
+  `ShowingID` INT NOT NULL,
   `PerformerID` INT NOT NULL,
-  INDEX `fk_ShowingPerformer_Showing2_idx` (`ShowID` ASC) VISIBLE,
+  INDEX `fk_ShowingPerformer_Showing2_idx` (`ShowingID` ASC) VISIBLE,
   INDEX `fk_ShowingPerformer_Performer1_idx` (`PerformerID` ASC) VISIBLE,
-  PRIMARY KEY (`ShowID`, `PerformerID`),
+  PRIMARY KEY (`ShowingID`, `PerformerID`),
   CONSTRAINT `fk_ShowingPerformer_Showing2`
-    FOREIGN KEY (`ShowID`)
-    REFERENCES `Theatre`.`Showing` (`ShowID`)
+    FOREIGN KEY (`ShowingID`)
+    REFERENCES `Theatre`.`Showing` (`ShowingID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_ShowingPerformer_Performer1`
@@ -200,6 +200,8 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
+
+
 -- test inserts into all tables
 INSERT INTO Employee (fname, lname, email, address) VALUES ("John", "Doe", "JDoe@TR.com", "32 Oliver Dr");
 INSERT INTO Payment (CardDetails, PaymentDate, PaymentAmount) VALUES ("4548493283237532", curdate(), 4000);
@@ -207,7 +209,7 @@ INSERT INTO Customer (fname, lname, email, address, username, password) VALUES (
 INSERT INTO ShowType (Genre) VALUES ("Theatre"), ("Musical"), ("Opera"), ("Concert");
 INSERT INTO Showing (Title, Duration, Lang, Info, ShowTypeID) VALUES ("Mamma Mia", 195, "English", "Mamma Mia! is a jukebox musical written by British playwright Catherine Johnson, based on the songs of ABBA composed by Benny Andersson and Björn Ulvaeus, members of the band. The title of the musical is taken from the group's 1975 chart-topper 'Mamma Mia'.",2);
 INSERT INTO Performer (pname) VALUES ("MammaMiaGroup");
-INSERT INTO ShowingPerformer(ShowID, PerformerID) VALUES (1,1); 
+INSERT INTO ShowingPerformer(ShowingID, PerformerID) VALUES (1,1); 
 INSERT INTO Performance (pdate, ptime, ShowingID) VALUES ("2022-07-13", "Matinee", 1);
 INSERT INTO Ticket (NumberOfTickets, Cost, CustomerID, PaymentID, ShowingID) VALUES (1,4000,1,1,1);
 INSERT INTO Seat (SeatZone, NumberOfSeats, Price, PerformanceID) VALUES ("Circle", 80, 4000, 1), ("Stalls", 120, 4000, 1); 
