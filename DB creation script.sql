@@ -117,9 +117,6 @@ CREATE TABLE IF NOT EXISTS `Theatre`.`Performance` (
   `PerformanceID` INT NOT NULL AUTO_INCREMENT,
   `pdate` DATE NULL,
   `ptime` VARCHAR(45) NULL,
-  `NumberOfSeatsCircle` INT NULL,
-  `NumberOfSeatsStalls` INT NULL,
-  `Price` INT NULL,
   `ShowingID` INT NOT NULL,
   PRIMARY KEY (`PerformanceID`),
   INDEX `fk_Performance_Show1_idx` (`ShowingID` ASC) VISIBLE,
@@ -137,16 +134,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Theatre`.`Performer` (
   `PerformerID` INT NOT NULL AUTO_INCREMENT,
-  `GroupName` VARCHAR(70) NULL,
-  `ShowID` INT NOT NULL,
+  `pname` VARCHAR(70) NULL,
   PRIMARY KEY (`PerformerID`),
-  UNIQUE INDEX `PerformerID_UNIQUE` (`PerformerID` ASC) VISIBLE,
-  INDEX `fk_Performer_Showing1_idx` (`ShowID` ASC) VISIBLE,
-  CONSTRAINT `fk_Performer_Showing1`
-    FOREIGN KEY (`ShowID`)
-    REFERENCES `Theatre`.`Showing` (`ShowID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  UNIQUE INDEX `PerformerID_UNIQUE` (`PerformerID` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -165,38 +155,39 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Theatre`.`Pricing`
+-- Table `Theatre`.`Seat`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Theatre`.`Pricing` (
-  `PricingID` INT NOT NULL,
-  `Performance_PerformanceID` INT NOT NULL,
-  `Showing_ShowID` INT NOT NULL,
-  PRIMARY KEY (`PricingID`),
-  INDEX `fk_Pricing_Performance1_idx` (`Performance_PerformanceID` ASC) VISIBLE,
-  INDEX `fk_Pricing_Showing1_idx` (`Showing_ShowID` ASC) VISIBLE,
-  CONSTRAINT `fk_Pricing_Performance1`
-    FOREIGN KEY (`Performance_PerformanceID`)
+CREATE TABLE IF NOT EXISTS `Theatre`.`Seat` (
+  `SeatID` INT NOT NULL AUTO_INCREMENT,
+  `SeatType` VARCHAR(6) NULL,
+  `Price` INT NULL,
+  `NumberOfSeats` INT NULL,
+  `PerformanceID` INT NOT NULL,
+  PRIMARY KEY (`SeatID`),
+  INDEX `fk_Seat_Performance1_idx` (`PerformanceID` ASC) VISIBLE,
+  CONSTRAINT `fk_Seat_Performance1`
+    FOREIGN KEY (`PerformanceID`)
     REFERENCES `Theatre`.`Performance` (`PerformanceID`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Pricing_Showing1`
-    FOREIGN KEY (`Showing_ShowID`)
-    REFERENCES `Theatre`.`Showing` (`ShowID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Theatre`.`GroupMembers`
+-- Table `Theatre`.`ShowingPerformer`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Theatre`.`GroupMembers` (
-  `GroupMembersID` INT NOT NULL AUTO_INCREMENT,
-  `mname` VARCHAR(45) NULL,
+CREATE TABLE IF NOT EXISTS `Theatre`.`ShowingPerformer` (
+  `ShowID` INT NOT NULL,
   `PerformerID` INT NOT NULL,
-  PRIMARY KEY (`GroupMembersID`),
-  INDEX `fk_GroupMembers_Performer1_idx` (`PerformerID` ASC) VISIBLE,
-  CONSTRAINT `fk_GroupMembers_Performer1`
+  INDEX `fk_ShowingPerformer_Showing2_idx` (`ShowID` ASC) VISIBLE,
+  INDEX `fk_ShowingPerformer_Performer1_idx` (`PerformerID` ASC) VISIBLE,
+  PRIMARY KEY (`ShowID`, `PerformerID`),
+  CONSTRAINT `fk_ShowingPerformer_Showing2`
+    FOREIGN KEY (`ShowID`)
+    REFERENCES `Theatre`.`Showing` (`ShowID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_ShowingPerformer_Performer1`
     FOREIGN KEY (`PerformerID`)
     REFERENCES `Theatre`.`Performer` (`PerformerID`)
     ON DELETE NO ACTION
@@ -215,7 +206,8 @@ INSERT INTO Payment (CardDetails, PaymentDate, PaymentAmount) VALUES ("454849328
 INSERT INTO Customer (fname, lname, email, address, username, password) VALUES ("Jane", "Doe", "JDoes@email.com", "33 Oliver Dr", "JaDo", "password"); 
 INSERT INTO ShowType (Genre) VALUES ("Theatre"), ("Musical"), ("Opera"), ("Concert");
 INSERT INTO Showing (Title, Duration, Lang, Info, ShowTypeID) VALUES ("Mamma Mia", 195, "English", "Mamma Mia! is a jukebox musical written by British playwright Catherine Johnson, based on the songs of ABBA composed by Benny Andersson and Björn Ulvaeus, members of the band. The title of the musical is taken from the group's 1975 chart-topper 'Mamma Mia'.",2);
-INSERT INTO Performer (GroupName, ShowID) VALUES ("MammaMiaGroup", 1);
-INSERT INTO GroupMembers (mname, performerID) VALUES ("Jack Danson", 1), ("Emma Mullen", 1);
-INSERT INTO Performance (pdate, ptime, NumberOfSeatsCircle, NumberOfSeatsStalls, price, ShowingID) VALUES ("2022-07-13", "Matinee", 80, 120, 4000, 1);
+INSERT INTO Performer (pname) VALUES ("MammaMiaGroup");
+INSERT INTO ShowingPerformer(ShowID, PerformerID) VALUES (1,1); 
+INSERT INTO Performance (pdate, ptime, ShowingID) VALUES ("2022-07-13", "Matinee", 1);
 INSERT INTO Ticket (NumberOfTickets, Cost, CustomerID, PaymentID, ShowingID) VALUES (1,4000,1,1,1);
+INSERT INTO Seat (SeatType, NumberOfSeats, Price, PerformanceID) VALUES ("Circle", 80, 4000, 1), ("Stalls", 120, 4000, 1); 
