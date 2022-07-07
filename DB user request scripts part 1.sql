@@ -104,15 +104,18 @@ WHERE
 -- of this script to get specific tickets and get necessary data related to it - possibility to make multiple purchases by creating more tickets and
 -- adding them all into the checkout basket.  
 SELECT 
-    TicketID,
-    NumberOfTickets,
-    Cost,
+    BookingID,
+    NumberOfAdults as AdultTickets,
+    NumberOfChildren as ChildTickets,
+    TotalCost,
     Showing.Title AS Title,
     Performance.pdate AS Date,
     Performance.ptime AS Time
 FROM
-    Ticket
-        LEFT JOIN
-    Showing ON Ticket.ShowingID = Showing.ShowingID
-        LEFT JOIN
-    Performance ON Showing.ShowingID = Performance.ShowingID;
+    Booking
+        JOIN
+    Seat ON Seat.SeatID = Booking.SeatID
+        JOIN
+    Performance ON Seat.PerformanceID = Performance.PerformanceID
+    JOIN
+    Showing ON Performance.ShowingID = Showing.ShowingID;
