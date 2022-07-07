@@ -211,5 +211,6 @@ INSERT INTO Showing (Title, Duration, Lang, Info, ShowTypeID) VALUES ("Mamma Mia
 INSERT INTO Performer (pname) VALUES ("MammaMiaGroup");
 INSERT INTO ShowingPerformer(ShowingID, PerformerID) VALUES (1,1); 
 INSERT INTO Performance (pdate, ptime, ShowingID) VALUES ("2022-07-13", "Matinee", 1);
-INSERT INTO Booking (NumberOfAdults, NumberOfChildren, TotalCost, CustomerID, PaymentID, SeatID) VALUES (1,0,4000,1,1,1);
 INSERT INTO Seat (SeatZone, NumberOfSeats, Price, PerformanceID) VALUES ("Circle", 80, 4000, 1), ("Stalls", 120, 4000, 1); 
+INSERT INTO Booking (NumberOfAdults, NumberOfChildren, TotalCost, CustomerID, PaymentID, SeatID) VALUES (1,0,4000,1,1,1);
+
